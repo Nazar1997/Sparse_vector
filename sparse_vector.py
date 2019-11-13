@@ -31,11 +31,30 @@ def loader(file_name):
 
 
 class SparseVector:
-    def __init__(self, shape=None, dtype=None):
-        self.shape = shape if shape is not None else 1
-        self.data = np.array([0], dtype=dtype)
-        self.indices = np.array([0], dtype=np.int64)
-        self.dtype = dtype
+    def __init__(self, arg1, shape=None, dtype=None):
+        """
+        Sparse vector init.
+
+        It can be initiated following ways:
+
+        SparseVector(L: int)
+            Creates zeros vector of length L
+
+        SparseVector(V: np.array)
+            Creates sparse analogous of V
+
+        SparseVector(inp: Tuple[np.array, np.array])
+            Copy directly
+            self.data, self.indices = inp
+        """
+        if isinstance(arg1, int):
+            self.shape = arg1
+            self.data = np.array([0], dtype=dtype)
+            self.indices = np.array([0], dtype=np.int64)
+            self.dtype = dtype
+
+        elif isinstance(arg1, np.array):
+
 
     def tamp(self, index=None):
         if self.data.shape[0] < 3:
@@ -102,13 +121,11 @@ class SparseVector:
 
     def __setitem__(self, key, value):
         if not (isinstance(key, slice) or
-                isinstance(key, int)
-        ):
+                isinstance(key, int)):
             raise TypeError(f"Can't use {type(key)} as index")
 
         if not (isinstance(value, np.ndarray) or
-                isinstance(value, self.dtype)
-        ):
+                isinstance(value, self.dtype)):
             raise TypeError(f"Wrong data type, vector has {self.dtype}, but tried to set {type(value)}")
 
         if isinstance(value, np.ndarray):
@@ -141,6 +158,7 @@ class SparseVector:
                 if key.start < 0 or key.stop > self.shape:
                     raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.shape} shapegth")
 
+                #Fast binary search
                 ind_left = np.searchsorted(self.indices, key.start, 'right') - 1
                 ind_right = np.searchsorted(self.indices, key.stop, 'right') - 1
 
