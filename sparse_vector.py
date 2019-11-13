@@ -14,7 +14,7 @@ def from_slice_to_range(item):
 
 
 def saver(sparse_vec, file_name):
-    dump([sparse_vec.len,
+    dump([sparse_vec.shape,
           sparse_vec.data,
           sparse_vec.indices],
          file_name)
@@ -22,17 +22,17 @@ def saver(sparse_vec, file_name):
 
 def loader(file_name):
     data = load(file_name)
-    sparse_vec = Sparse_vector()
-    [sparse_vec.len,
+    sparse_vec = SparseVector()
+    [sparse_vec.shape,
      sparse_vec.data,
      sparse_vec.indices,
      sparse_vec.dtype] = data + [data[1].dtype]
     return sparse_vec
 
 
-class Sparse_vector:
-    def __init__(self, len=None, dtype=None):
-        self.len = len if len is not None else 1
+class SparseVector:
+    def __init__(self, shape=None, dtype=None):
+        self.shape = shape if shape is not None else 1
         self.data = np.array([0], dtype=dtype)
         self.indices = np.array([0], dtype=np.int64)
         self.dtype = dtype
@@ -71,11 +71,11 @@ class Sparse_vector:
             if key.start is None:
                 key = slice(0, key.stop)
             if key.stop is None:
-                key = slice(key.start, self.len)
+                key = slice(key.start, self.shape)
             if key.step is not None:
                 raise IndexError("Can't use step")
-            if key.start < 0 or key.stop > self.len:
-                raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.len} length")
+            if key.start < 0 or key.stop > self.shape:
+                raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.shape} shapegth")
 
             ind_left = np.searchsorted(self.indices, key.start, 'right') - 1
             ind_right = np.searchsorted(self.indices, key.stop, 'right') - 1
@@ -118,11 +118,11 @@ class Sparse_vector:
                 if key.start is None:
                     key = slice(0, key.stop)
                 if key.stop is None:
-                    key = slice(key.start, self.len)
+                    key = slice(key.start, self.shape)
                 if key.step is not None:
                     raise IndexError("Can't use step")
-                if key.start < 0 or key.stop > self.len:
-                    raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.len} length")
+                if key.start < 0 or key.stop > self.shape:
+                    raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.shape} shapegth")
 
                 indices = np.where(np.diff(value,
                                            prepend=value[0] + 1,
@@ -135,11 +135,11 @@ class Sparse_vector:
                 if key.start is None:
                     key = slice(0, key.stop)
                 if key.stop is None:
-                    key = slice(key.start, self.len)
+                    key = slice(key.start, self.shape)
                 if key.step is not None:
                     raise IndexError("Can't use step")
-                if key.start < 0 or key.stop > self.len:
-                    raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.len} length")
+                if key.start < 0 or key.stop > self.shape:
+                    raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.shape} shapegth")
 
                 ind_left = np.searchsorted(self.indices, key.start, 'right') - 1
                 ind_right = np.searchsorted(self.indices, key.stop, 'right') - 1
@@ -148,7 +148,7 @@ class Sparse_vector:
                     ind_left_old = self.indices[ind_left]
                     ind_right_old = self.indices[ind_left + 1] \
                         if ind_left + 1 < self.indices.shape[0] \
-                        else self.len
+                        else self.shape
 
                     # WHOLE CASE
                     if ind_left_old == key.start and ind_right_old == key.stop:
@@ -181,7 +181,7 @@ class Sparse_vector:
                     ind_left_old = self.indices[ind_left]
                     ind_right_old = self.indices[ind_right + 1] \
                         if ind_right + 1 < self.indices.shape[0] \
-                        else self.len
+                        else self.shape
 
                     # WHOLE CASE
                     if ind_left_old == key.start and ind_right_old == key.stop:
