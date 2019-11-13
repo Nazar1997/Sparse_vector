@@ -1,3 +1,5 @@
+### Created by Nazar
+
 import numpy as np
 from joblib import Parallel, delayed, dump, load
 
