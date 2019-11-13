@@ -43,17 +43,42 @@ class SparseVector:
         SparseVector(V: np.array)
             Creates sparse analogous of V
 
-        SparseVector(inp: Tuple[np.array, np.array])
+        SparseVector(inp: Tuple[np.array, np.array], shape)
             Copy directly
             self.data, self.indices = inp
+            with certain shape
         """
         if isinstance(arg1, int):
+            if arg1 < 1:
+                raise TypeError(f"Can't use {arg1} as input, wrong length.")
             self.shape = arg1
             self.data = np.array([0], dtype=dtype)
             self.indices = np.array([0], dtype=np.int64)
             self.dtype = dtype
 
         elif isinstance(arg1, np.array):
+            if arg1.ndim != 1:
+                raise TypeError(f"Can't use {arg1} as input, not single-dimensional.")
+            self.shape = arg1.shape[0]
+            self.data = np.array([0], dtype=dtype)
+            self.indices = np.array([0], dtype=np.int64)
+            self.dtype = arg1.dtype
+            self.__setitem__(slice(0, self.shape), arg1)
+
+        elif isinstance(arg1, tuple):
+            if len(arg1) != 2:
+                raise TypeError(f"Can't use {arg1} as input, wrong number of elements to unpack.")
+
+            self.data = arg1[0]
+            self.indices = arg1[1]
+            self.dtype = arg1[0].dtype
+            self.shape = shape if shape is not None else self.indices[-1] + 1
+
+        else:
+            raise TypeError(f"Can't use {arg1} as input!")
+
+
+
 
 
     def tamp(self, index=None):
