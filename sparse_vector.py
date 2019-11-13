@@ -228,3 +228,25 @@ class SparseVector:
             elif isinstance(key, int):
                 self.__setitem__(slice(key, key + 1), value)
                 return
+
+    def __repr__(self):
+        if self.shape <= 10:
+            return 'sparse_array([' + \
+                   ', '.join(self.__getitem__(slice(0, self.shape)).astype(str)) + \
+                   f'], dtype={self.dtype})'
+        else:
+            info = 'sparse_array(['
+            info += ', '.join(self.__getitem__(slice(0, 5)).astype(str))
+            info += ', ..., '
+            info += ', '.join(self.__getitem__(slice(self.shape - 6, self.shape)).astype(str))
+            info += f'], dtype={self.dtype})'
+            return info
+
+    def __str__(self):
+        info = ""
+        info += f"Shape is {str(self.shape)}\n"
+        info += f"Data is {str(self.data)}\n"
+        info += f"Indices is {str(self.indices)}\n"
+        info += f"Dtype is {str(self.dtype)}\n"
+        return info
+
