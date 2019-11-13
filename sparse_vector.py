@@ -1,4 +1,4 @@
-### Created by Nazar
+# Created by Nazar
 
 import numpy as np
 from joblib import Parallel, delayed, dump, load
@@ -12,20 +12,23 @@ def from_slice_to_range(item):
     else:
         raise TypeError
 
-def saver(sparce_vec, file_name):
-    dump([sparce_vec.len, 
-          sparce_vec.data, 
-          sparce_vec.indices],
+
+def saver(sparse_vec, file_name):
+    dump([sparse_vec.len,
+          sparse_vec.data,
+          sparse_vec.indices],
          file_name)
+
 
 def loader(file_name):
     data = load(file_name)
-    sparce_vec = Sparse_vector()
-    [sparce_vec.len, 
-     sparce_vec.data, 
-     sparce_vec.indices,
-     sparce_vec.dtype] = data + [data[1].dtype]
-    return sparce_vec
+    sparse_vec = Sparse_vector()
+    [sparse_vec.len,
+     sparse_vec.data,
+     sparse_vec.indices,
+     sparse_vec.dtype] = data + [data[1].dtype]
+    return sparse_vec
+
 
 class Sparse_vector:
     def __init__(self, len=None, dtype=None):
@@ -77,7 +80,7 @@ class Sparse_vector:
             ind_left = np.searchsorted(self.indices, key.start, 'right') - 1
             ind_right = np.searchsorted(self.indices, key.stop, 'right') - 1
             if ind_left == ind_right:
-                return np.repeat(self.data[ind_left], key.stop-key.start)
+                return np.repeat(self.data[ind_left], key.stop - key.start)
             else:
                 result = np.zeros(key.stop - key.start,
                                   dtype=self.data.dtype)
@@ -98,18 +101,16 @@ class Sparse_vector:
             raise TypeError(f"Can't use {type(key)} as index")
 
     def __setitem__(self, key, value):
-        if not (isinstance(key, slice) or 
+        if not (isinstance(key, slice) or
                 isinstance(key, int)
-                ):
+        ):
             raise TypeError(f"Can't use {type(key)} as index")
-           
-        if not (isinstance(value, np.ndarray) or 
+
+        if not (isinstance(value, np.ndarray) or
                 isinstance(value, self.dtype)
-                ):
+        ):
             raise TypeError(f"Wrong data type, vector has {self.dtype}, but tried to set {type(value)}")
-        
-        
-        
+
         if isinstance(value, np.ndarray):
             if value.ndim != 1:
                 raise TypeError(f"Can't use multydim data")
@@ -122,12 +123,12 @@ class Sparse_vector:
                     raise IndexError("Can't use step")
                 if key.start < 0 or key.stop > self.len:
                     raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.len} length")
-                
-                indices = np.where(np.diff(value, 
-                                           prepend=value[0] + 1, 
+
+                indices = np.where(np.diff(value,
+                                           prepend=value[0] + 1,
                                            append=value[-1] + 1) != 0)[0]
                 for i, j in zip(indices[:-1], indices[1:]):
-                    self.__setitem__(slice(key.start+i, key.start+j), value[i])
+                    self.__setitem__(slice(key.start + i, key.start + j), value[i])
             return
         elif isinstance(value, self.dtype):
             if isinstance(key, slice):
@@ -225,5 +226,5 @@ class Sparse_vector:
                         return
 
             elif isinstance(key, int):
-                self.__setitem__(slice(key, key+1), value)
+                self.__setitem__(slice(key, key + 1), value)
                 return
