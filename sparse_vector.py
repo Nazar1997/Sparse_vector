@@ -1,7 +1,7 @@
 # Created by Nazar
 
 import numpy as np
-from joblib import Parallel, delayed, dump, load
+from joblib import dump, load
 
 
 def from_slice_to_range(item):
@@ -56,13 +56,13 @@ class SparseVector:
             self.indices = np.array([0], dtype=np.int64)
             self.dtype = dtype
 
-        elif isinstance(arg1, np.array):
+        elif isinstance(arg1, np.ndarray):
             if arg1.ndim != 1:
                 raise TypeError(f"Can't use {arg1} as input, not single-dimensional.")
             self.shape = arg1.shape[0]
             self.data = np.array([0], dtype=dtype)
             self.indices = np.array([0], dtype=np.int64)
-            self.dtype = arg1.dtype
+            self.dtype = arg1.dtype.type
             self.__setitem__(slice(0, self.shape), arg1)
 
         elif isinstance(arg1, tuple):
@@ -71,7 +71,7 @@ class SparseVector:
 
             self.data = arg1[0]
             self.indices = arg1[1]
-            self.dtype = arg1[0].dtype
+            self.dtype = arg1[0].dtype.type
             self.shape = shape if shape is not None else self.indices[-1] + 1
 
         else:
