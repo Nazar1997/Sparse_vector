@@ -17,7 +17,7 @@ For example:
 For example this code allows to use 5 time less memory than simple vector of length 10000
 
 ```python
-from sparce_vector import SparseVector
+from .sparce_vector import SparseVector
 import numpy as np
 
 sp_vec = SparseVector(np.arange(10000) // 10, 
@@ -29,7 +29,7 @@ On the real data this package can achieve much better results.
 For example on this real [data](http://dbarchive.biosciencedbc.jp/kyushu-u/hg19/assembled/Pol.Prs.50.AllAg.AllCell.bed)
 compression exceeded 1.4 * 10^4.
 
-This format make available to use much more bioinformatics data.
+This format makes available to use much more bioinformatics data.
 
 ## Authors
 
