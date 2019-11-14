@@ -14,6 +14,8 @@ For example:
 
 ### Usage
 
+For example this code allows to use 5 time less memory than simple vector of length 10000
+
 ```python
 from sparce_vector import SparseVector
 import numpy as np
@@ -22,7 +24,6 @@ sp_vec = SparseVector(np.arange(10000) // 10,
                       dtype=np.int64)
 ```
 
-For example this code allows to use 5 time less memory than simple vector of length 10000
 
 On the real data this package can achieve much better results. 
 For example on this real [data](http://dbarchive.biosciencedbc.jp/kyushu-u/hg19/assembled/Pol.Prs.50.AllAg.AllCell.bed)
