@@ -17,7 +17,7 @@ def saver(sparse_vec, file_name):
     """
     Saves model
     """
-    
+
     dump([sparse_vec.shape,
           sparse_vec.data,
           sparse_vec.indices],
@@ -84,10 +84,6 @@ class SparseVector:
 
         else:
             raise TypeError(f"Can't use {arg1} as input!")
-
-
-
-
 
     def tamp(self, index=None):
         if self.data.shape[0] < 3:
@@ -191,7 +187,7 @@ class SparseVector:
                 if key.start < 0 or key.stop > self.shape:
                     raise IndexError(f"Can't use range {(key.start, key.stop)} in vector with {self.shape} shapegth")
 
-                #Fast binary search
+                # Fast binary search
                 ind_left = np.searchsorted(self.indices, key.start, 'right') - 1
                 ind_right = np.searchsorted(self.indices, key.stop, 'right') - 1
 
