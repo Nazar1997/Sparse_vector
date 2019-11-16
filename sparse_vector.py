@@ -17,6 +17,7 @@ def saver(sparse_vec, file_name):
     """
     Saves model
     """
+    
     dump([sparse_vec.shape,
           sparse_vec.data,
           sparse_vec.indices],
@@ -27,6 +28,7 @@ def loader(file_name):
     """
     Loads model
     """
+
     data = load(file_name)
     sparse_vec = SparseVector()
     [sparse_vec.shape,
