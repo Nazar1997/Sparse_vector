@@ -30,7 +30,7 @@ def loader(file_name):
     """
 
     data = load(file_name)
-    sparse_vec = SparseVector()
+    sparse_vec = SparseVector(1)
     [sparse_vec.shape,
      sparse_vec.data,
      sparse_vec.indices,

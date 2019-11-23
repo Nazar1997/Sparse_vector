@@ -22,6 +22,12 @@ import numpy as np
 
 sp_vec = SparseVector(np.arange(10000) // 10, 
                       dtype=np.int64)
+
+# returns numpy array
+sp_vec[3:6]
+
+#returns whole array as numpy array
+sp_vec[:]
 ```
 
 
