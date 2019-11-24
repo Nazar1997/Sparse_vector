@@ -39,7 +39,7 @@ def loader(file_name):
 
 
 class SparseVector:
-    def __init__(self, arg1, shape=None, dtype=None):
+    def __init__(self, arg1, shape=None, dtype=np.int64):
         """
         Sparse vector init.
 
@@ -68,10 +68,10 @@ class SparseVector:
             if arg1.ndim != 1:
                 raise TypeError(f"Can't use {arg1} as input, not single-dimensional.")
             self.shape = arg1.shape[0]
-            self.data = np.array([0], dtype=dtype)
-            self.indices = np.array([0], dtype=np.int64)
             self.dtype = arg1.dtype.type
-            self.__setitem__(slice(0, self.shape), arg1)
+            self.indices = np.where(np.diff(arg1, prepend=arg1[0] + 1) != 0)[0]
+            self.data = arg1[self.indices]
+
 
         elif isinstance(arg1, tuple):
             if len(arg1) != 2:
